@@ -78,7 +78,7 @@ func (p *DvlsProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	}
 
 	if appId == "" || appSecret == "" {
-		resp.Diagnostics.AddError("unable to set up dvls client", "'app_id' and 'app_appSecret' cannot be empty")
+		resp.Diagnostics.AddError("unable to set up dvls client", "'app_id' and 'app_secret' cannot be empty")
 		return
 	}
 

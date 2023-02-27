@@ -19,7 +19,7 @@ resource "dvls_entry" "example" {
   description = "bar"
   username    = "foo"
   password    = "bar"
-  folder      = "foo/bar"
+  folder      = "foo\\bar"
   tags        = ["foo", "bar"]
 }
 ```
