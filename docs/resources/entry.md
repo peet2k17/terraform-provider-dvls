@@ -44,4 +44,10 @@ resource "dvls_entry" "example" {
 
 - `id` (String) Entry ID
 
+## Import
 
+Import is supported using the following syntax:
+
+```shell
+terraform import dvls_entry.example 00000000-0000-0000-0000-000000000000
+```
