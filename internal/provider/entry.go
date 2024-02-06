@@ -21,6 +21,10 @@ func (validator entryIdValidator) MarkdownDescription(ctx context.Context) strin
 }
 
 func (d entryIdValidator) ValidateString(_ context.Context, request validator.StringRequest, response *validator.StringResponse) {
+	if request.ConfigValue.IsNull() || request.ConfigValue.IsUnknown() {
+		return
+	}
+
 	id := request.ConfigValue.ValueString()
 
 	_, err := uuid.Parse(id)
