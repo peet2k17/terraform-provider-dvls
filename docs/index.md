@@ -3,7 +3,7 @@
 page_title: "dvls Provider"
 subcategory: ""
 description: |-
-  The provider can be configured using the environment variables DVLSAPPID and DVLSAPPSECRET
+  The provider can be configured using the environment variables DVLS_APP_ID and DVLS_APP_SECRET
 ---
 
 # dvls Provider

@@ -34,5 +34,3 @@ data "dvls_entry" "example" {
 - `tags` (List of String) Entry tags
 - `username` (String) Entry username
 - `vault_id` (String) Vault ID
-
-
