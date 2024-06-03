@@ -7,17 +7,17 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
 
-type entryIdValidator struct{}
+type entryusercredentialIdValidator struct{}
 
-func (validator entryIdValidator) Description(_ context.Context) string {
-	return "entry must be a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)"
+func (validator entryusercredentialIdValidator) Description(_ context.Context) string {
+	return "entryusercredential must be a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)"
 }
 
-func (validator entryIdValidator) MarkdownDescription(ctx context.Context) string {
+func (validator entryusercredentialIdValidator) MarkdownDescription(ctx context.Context) string {
 	return validator.Description(ctx)
 }
 
-func (d entryIdValidator) ValidateString(_ context.Context, request validator.StringRequest, response *validator.StringResponse) {
+func (d entryusercredentialIdValidator) ValidateString(_ context.Context, request validator.StringRequest, response *validator.StringResponse) {
 	if request.ConfigValue.IsNull() || request.ConfigValue.IsUnknown() {
 		return
 	}
@@ -26,7 +26,7 @@ func (d entryIdValidator) ValidateString(_ context.Context, request validator.St
 
 	_, err := uuid.Parse(id)
 	if err != nil {
-		response.Diagnostics.AddError("entry id is not a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)", err.Error())
+		response.Diagnostics.AddError("entryusercredential id is not a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)", err.Error())
 		return
 	}
 }

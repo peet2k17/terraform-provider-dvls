@@ -94,7 +94,7 @@ func (d *VaultDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		return
 	}
 
-	vault, err := d.client.GetVault(data.Id.ValueString())
+	vault, err := d.client.Vaults.Get(data.Id.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("unable to read vault", err.Error())
 		return

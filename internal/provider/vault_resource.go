@@ -126,7 +126,7 @@ func (r *VaultResource) Create(ctx context.Context, req resource.CreateRequest, 
 		options.Password = plan.MasterPassword.ValueStringPointer()
 	}
 
-	err = r.client.NewVault(vault, &options)
+	err = r.client.Vaults.New(vault, &options)
 	if err != nil {
 		resp.Diagnostics.AddError("unable to create vault", err.Error())
 		return
@@ -151,7 +151,7 @@ func (r *VaultResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
-	vault, err = r.client.GetVault(vault.ID)
+	vault, err = r.client.Vaults.Get(vault.ID)
 	if err != nil {
 		if strings.Contains(err.Error(), dvls.SaveResultNotFound.String()) {
 			resp.State.RemoveResource(ctx)
@@ -163,7 +163,7 @@ func (r *VaultResource) Read(ctx context.Context, req resource.ReadRequest, resp
 
 	setVaultResourceModel(vault, state)
 
-	valid, err := r.client.ValidateVaultPassword(vault.ID, state.MasterPassword.ValueString())
+	valid, err := r.client.Vaults.ValidatePassword(vault.ID, state.MasterPassword.ValueString())
 	if err != nil && strings.Contains(err.Error(), "unexpected result code 0 (Error)") {
 		state.MasterPassword = basetypes.NewStringNull()
 	} else if err != nil {
@@ -203,7 +203,7 @@ func (r *VaultResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		options.Password = plan.MasterPassword.ValueStringPointer()
 	}
 
-	err = r.client.UpdateVault(vault, &options)
+	err = r.client.Vaults.Update(vault, &options)
 	if err != nil {
 		resp.Diagnostics.AddError("unable to update vault", err.Error())
 		return
@@ -220,7 +220,7 @@ func (r *VaultResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 		return
 	}
 
-	err := r.client.DeleteVault(state.Id.ValueString())
+	err := r.client.Vaults.Delete(state.Id.ValueString())
 	if err != nil {
 		if strings.Contains(err.Error(), dvls.SaveResultNotFound.String()) {
 			resp.State.RemoveResource(ctx)

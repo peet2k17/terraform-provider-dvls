@@ -12,19 +12,19 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ datasource.DataSource = &EntryDataSource{}
+var _ datasource.DataSource = &EntryUserCredentialDataSource{}
 
-func NewEntryDataSource() datasource.DataSource {
-	return &EntryDataSource{}
+func NewEntryUserCredentialDataSource() datasource.DataSource {
+	return &EntryUserCredentialDataSource{}
 }
 
-// EntryDataSource defines the data source implementation.
-type EntryDataSource struct {
+// EntryUserCredentialDataSource defines the data source implementation.
+type EntryUserCredentialDataSource struct {
 	client *dvls.Client
 }
 
-// EntryDataSourceModel describes the data source data model.
-type EntryDataSourceModel struct {
+// EntryUserCredentialDataSourceModel describes the data source data model.
+type EntryUserCredentialDataSourceModel struct {
 	Id          types.String   `tfsdk:"id"`
 	VaultId     types.String   `tfsdk:"vault_id"`
 	Name        types.String   `tfsdk:"name"`
@@ -35,55 +35,55 @@ type EntryDataSourceModel struct {
 	Tags        []types.String `tfsdk:"tags"`
 }
 
-func (d *EntryDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_entry"
+func (d *EntryUserCredentialDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_entry_user_credential"
 }
 
-func (d *EntryDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *EntryUserCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Entry data source",
+		Description: "User Credential data source",
 
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Description: "Entry ID",
+				Description: "User Credential ID",
 				Required:    true,
-				Validators:  []validator.String{entryIdValidator{}},
+				Validators:  []validator.String{entryusercredentialIdValidator{}},
 			},
 			"vault_id": schema.StringAttribute{
 				Description: "Vault ID",
 				Computed:    true,
 			},
 			"name": schema.StringAttribute{
-				Description: "Entry name",
+				Description: "User Credential name",
 				Computed:    true,
 			},
 			"description": schema.StringAttribute{
-				Description: "Entry description",
+				Description: "User Credential description",
 				Computed:    true,
 			},
 			"username": schema.StringAttribute{
-				Description: "Entry username",
+				Description: "User Credential username",
 				Computed:    true,
 			},
 			"password": schema.StringAttribute{
-				Description: "Entry password",
+				Description: "User Credential password",
 				Computed:    true,
 				Sensitive:   true,
 			},
 			"folder": schema.StringAttribute{
-				Description: "Entry folder path",
+				Description: "User Credential folder path",
 				Computed:    true,
 			},
 			"tags": schema.ListAttribute{
 				ElementType: types.StringType,
-				Description: "Entry tags",
+				Description: "User Credential tags",
 				Computed:    true,
 			},
 		},
 	}
 }
 
-func (d *EntryDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (d *EntryUserCredentialDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -103,27 +103,27 @@ func (d *EntryDataSource) Configure(ctx context.Context, req datasource.Configur
 	d.client = client
 }
 
-func (d *EntryDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *EntryDataSourceModel
+func (d *EntryUserCredentialDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *EntryUserCredentialDataSourceModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	entry, err := d.client.GetEntry(data.Id.ValueString())
+	entryusercredential, err := d.client.Entries.UserCredential.Get(data.Id.ValueString())
 	if err != nil {
-		resp.Diagnostics.AddError("unable to read entry", err.Error())
+		resp.Diagnostics.AddError("unable to read entryusercredential", err.Error())
 		return
 	}
 
-	entry, err = d.client.GetEntryCredentialsPassword(entry)
+	entryusercredential, err = d.client.Entries.UserCredential.GetUserAuthDetails(entryusercredential)
 	if err != nil {
-		resp.Diagnostics.AddError("unable to read entry sensitive information", err.Error())
+		resp.Diagnostics.AddError("unable to read entryusercredential sensitive information", err.Error())
 		return
 	}
 
-	setEntryDataModel(entry, data)
+	setEntryUserCredentialDataModel(entryusercredential, data)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
