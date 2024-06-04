@@ -121,7 +121,7 @@ func (r *EntryUserCredentialResource) Create(ctx context.Context, req resource.C
 
 	entryusercredential, err := r.client.Entries.UserCredential.New(entryusercredential)
 	if err != nil {
-		resp.Diagnostics.AddError("unable to create entryusercredential", err.Error())
+		resp.Diagnostics.AddError("unable to create user credential entry", err.Error())
 		return
 	}
 
@@ -147,13 +147,13 @@ func (r *EntryUserCredentialResource) Read(ctx context.Context, req resource.Rea
 			resp.State.RemoveResource(ctx)
 			return
 		}
-		resp.Diagnostics.AddError("unable to read entryusercredential", err.Error())
+		resp.Diagnostics.AddError("unable to read user credential entry", err.Error())
 		return
 	}
 
 	entryusercredential, err = r.client.Entries.UserCredential.GetUserAuthDetails(entryusercredential)
 	if err != nil {
-		resp.Diagnostics.AddError("unable to read entryusercredential sensitive information", err.Error())
+		resp.Diagnostics.AddError("unable to read user credential entry sensitive information", err.Error())
 		return
 	}
 
@@ -175,7 +175,7 @@ func (r *EntryUserCredentialResource) Update(ctx context.Context, req resource.U
 
 	_, err := r.client.Entries.UserCredential.Update(entryusercredential)
 	if err != nil {
-		resp.Diagnostics.AddError("unable to update entryusercredential", err.Error())
+		resp.Diagnostics.AddError("unable to update user credential entry", err.Error())
 		return
 	}
 
@@ -196,7 +196,7 @@ func (r *EntryUserCredentialResource) Delete(ctx context.Context, req resource.D
 			resp.State.RemoveResource(ctx)
 			return
 		}
-		resp.Diagnostics.AddError("unable to delete entryusercredential", err.Error())
+		resp.Diagnostics.AddError("unable to delete user credential entry", err.Error())
 		return
 	}
 }

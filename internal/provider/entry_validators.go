@@ -10,7 +10,7 @@ import (
 type entryusercredentialIdValidator struct{}
 
 func (validator entryusercredentialIdValidator) Description(_ context.Context) string {
-	return "entryusercredential must be a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)"
+	return "user credential entry must be a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)"
 }
 
 func (validator entryusercredentialIdValidator) MarkdownDescription(ctx context.Context) string {
@@ -26,7 +26,7 @@ func (d entryusercredentialIdValidator) ValidateString(_ context.Context, reques
 
 	_, err := uuid.Parse(id)
 	if err != nil {
-		response.Diagnostics.AddError("entryusercredential id is not a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)", err.Error())
+		response.Diagnostics.AddError("user credential entry id is not a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)", err.Error())
 		return
 	}
 }
