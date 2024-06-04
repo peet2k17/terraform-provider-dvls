@@ -8,6 +8,7 @@ import (
 )
 
 type entryusercredentialIdValidator struct{}
+type entryCertificateIdValidator struct{}
 
 func (validator entryusercredentialIdValidator) Description(_ context.Context) string {
 	return "user credential entry must be a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)"
@@ -27,6 +28,28 @@ func (d entryusercredentialIdValidator) ValidateString(_ context.Context, reques
 	_, err := uuid.Parse(id)
 	if err != nil {
 		response.Diagnostics.AddError("user credential entry id is not a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)", err.Error())
+		return
+	}
+}
+
+func (validator entryCertificateIdValidator) Description(_ context.Context) string {
+	return "certificate entry must be a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)"
+}
+
+func (validator entryCertificateIdValidator) MarkdownDescription(ctx context.Context) string {
+	return validator.Description(ctx)
+}
+
+func (d entryCertificateIdValidator) ValidateString(_ context.Context, request validator.StringRequest, response *validator.StringResponse) {
+	if request.ConfigValue.IsNull() || request.ConfigValue.IsUnknown() {
+		return
+	}
+
+	id := request.ConfigValue.ValueString()
+
+	_, err := uuid.Parse(id)
+	if err != nil {
+		response.Diagnostics.AddError("certificate entry id is not a valid UUID (ex.: 00000000-0000-0000-0000-000000000000)", err.Error())
 		return
 	}
 }

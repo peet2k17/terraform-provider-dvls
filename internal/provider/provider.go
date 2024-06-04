@@ -95,6 +95,7 @@ func (p *DvlsProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 func (p *DvlsProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewEntryUserCredentialResource,
+		NewEntryCertificateResource,
 		NewVaultResource,
 	}
 }
@@ -102,6 +103,7 @@ func (p *DvlsProvider) Resources(ctx context.Context) []func() resource.Resource
 func (p *DvlsProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewEntryUserCredentialDataSource,
+		NewEntryCertificateDataSource,
 		NewVaultDataSource,
 	}
 }
