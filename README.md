@@ -51,3 +51,79 @@ In order to run the full suite of Acceptance tests, run `make testacc`.
 ```shell
 make testacc
 ```
+
+## Testing the Provider while developing
+
+In order to perform a test of the provider, create a `dev.tfrc` file in the root of the folder with the following content:
+
+```hcl
+provider_installation {
+  dev_overrides {
+    "devolutions/dvls" = "/Users/USERNAME/go/bin"
+  }
+  direct {
+  }
+}
+```
+
+Replace `/Users/USERNAME/go/bin` with the path to the compiled provider binary according to your operating system and environment.
+
+Then run the following command, assuming you are on macOS or Linux:
+
+```shell
+go build -o ~/go/bin/terraform-provider-dvls_v1.0.0
+chmod +x ~/go/bin/terraform-provider-dvls_v1.0.0
+# Run this command in the root directory of the repository
+terraform init
+```
+You can then create a test.tf or example.tf file with the required content; here is a sample:
+
+```hcl
+provider "dvls" {
+  base_uri   = "https://your-dvls-instance.com/"
+  app_id     = "your-app-id"
+  app_secret = "your-app-secret"
+}
+
+data "dvls_entry_website" "example" {
+  id = "id-of-website-entry"
+}
+
+output "website_name" {
+  value = data.dvls_entry_website.example.name
+}
+
+terraform {
+  required_providers {
+    dvls = {
+      source = "devolutions/dvls"
+    }
+  }
+}
+```
+
+Then run the following command:
+
+```shell
+terraform plan
+```
+
+This will be the output:
+
+```shell
+│ Warning: Provider development overrides are in effect
+│ 
+│ The following provider development overrides are set in the CLI configuration:
+│  - devolutions/dvls in /Users/USERNAME/go/bin
+│ 
+│ The behavior may therefore not match any released version of the provider and applying changes may cause the state to become incompatible
+│ with published releases.
+╵
+data.dvls_entry_website.example: Reading...
+data.dvls_entry_website.example: Read complete after 1s [id=123e4567-e89b-12d3-a456-426614174000]
+
+Changes to Outputs:
+  + website_name = "TestWebsite"
+```
+
+Please note that the `.gitignore` already ignores the `dev.tfrc`, `.terraform.lock.hcl`, `test.tf`, `example.tf`, and `terraform.tfstate` files and the folder `.terraform/`.

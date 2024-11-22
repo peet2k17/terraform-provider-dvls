@@ -2,8 +2,11 @@
 *.exe
 .DS_Store
 example.tf
+test.tf
 terraform.tfplan
 terraform.tfstate
+.terraform.lock.hcl
+dev.tfrc
 bin/
 dist/
 modules-dev/

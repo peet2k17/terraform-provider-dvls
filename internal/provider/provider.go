@@ -104,6 +104,7 @@ func (p *DvlsProvider) DataSources(ctx context.Context) []func() datasource.Data
 	return []func() datasource.DataSource{
 		NewEntryUserCredentialDataSource,
 		NewEntryCertificateDataSource,
+		NewEntryWebsiteDataSource,
 		NewVaultDataSource,
 	}
 }
