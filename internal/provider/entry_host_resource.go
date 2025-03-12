@@ -90,21 +90,6 @@ func (r *EntryHostResource) Schema(ctx context.Context, req resource.SchemaReque
 	}
 }
 
-func (r *EntryHostResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) error {
-	// Parse the ID from the import ID.
-	parts := strings.Split(req.ID, "/")
-	if len(parts) != 2 {
-		return fmt.Errorf("invalid import ID: %s", req.ID)
-	}
-
-	// Set the ID and Vault ID.
-	resp.State = &EntryHostResourceModel{
-		Id:      types.String(parts[1]),
-		VaultId: types.String(parts[0]),
-	}
-	return nil
-}
-
 func (r *EntryHostResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	// Get the resource model.
 	model := &EntryHostResourceModel{}
@@ -196,4 +181,8 @@ func (r *EntryHostResource) Delete(ctx context.Context, req resource.DeleteReque
 		resp.Error = err
 		return
 	}
+}
+
+func (r *EntryHostResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
