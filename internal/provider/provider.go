@@ -97,6 +97,7 @@ func (p *DvlsProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewEntryUserCredentialResource,
 		NewEntryCertificateResource,
 		NewVaultResource,
+		NewEntryHostResource,
 	}
 }
 
